@@ -81,7 +81,8 @@ LOOPBACK_DEV="$(sudo losetup -fP --show rpi.img)"
 echo_green "Re-created looped device ${LOOPBACK_DEV}"
 
 echo_green 'Resizing second partition'
-sudo resize2fs "${LOOPBACK_DEV}p2"
+sudo e2fsck -fy "${LOOPBACK_DEV}p2"  # Run filesystem check to fix errors
+sudo resize2fs "${LOOPBACK_DEV}p2"   # Resize after ensuring consistency
 
 echo_green 'Mounting image'
 sudo mount -v "${LOOPBACK_DEV}p2" "${TEMP_DIR}/mnt"
